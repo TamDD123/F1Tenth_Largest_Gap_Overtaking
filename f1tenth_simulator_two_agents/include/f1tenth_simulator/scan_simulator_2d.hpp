@@ -1,0 +1,89 @@
+#pragma once
+
+#include <random>
+
+#include "f1tenth_simulator/pose_2d.hpp"
+
+namespace racecar_simulator {
+
+class ScanSimulator2D {
+
+  private:
+
+    // Laser settings
+    int num_beams;
+    double field_of_view;
+    double scan_std_dev;
+    double angle_increment;
+    double scan_max_range;
+    double cube_width;
+    // Ray tracing settings
+    double ray_tracing_epsilon;
+
+    // The distance transform
+    double resolution;
+    size_t width, height;
+    Pose2D origin;
+    std::vector<double> dt;
+
+    // Static output vector
+    std::vector<double> scan_output;
+
+    // Noise generation
+    std::mt19937 noise_generator;
+    std::normal_distribution<double> noise_dist;
+
+    // Precomputed constants
+    double origin_c;
+    double origin_s;
+    int theta_discretization;
+    double theta_index_increment;
+
+    bool flag_can_see_opponent;
+    double threshold;
+    bool can_see_opponent;
+
+  public:
+    std::vector<double> sines;
+    std::vector<double> cosines;
+    std::vector<double> arctanes;
+
+    ScanSimulator2D() {}
+
+    ScanSimulator2D(
+        int num_beams_, 
+        double field_of_view_, 
+        double scan_std_dev_,
+        double scan_max_range,
+        double cube_width,
+        double ray_tracing_epsilon=0.01,
+        int theta_discretization=2000);
+
+    void set_map(
+        const std::vector<double> & map, 
+        size_t height, 
+        size_t width, 
+        double resolution,
+        const Pose2D & origin,
+        double free_threshold);
+    void set_map(const std::vector<double> &map, double free_threshold);
+
+    void scan(const Pose2D & pose, const Pose2D & opponent_pose, double * scan_data);
+    const std::vector<double> scan(const Pose2D & pose, const Pose2D & opponent_pose, bool flag);
+
+    double distance_transform(double x, double y) const;
+
+    double trace_ray(double x, double y, double theta_index, double opponent_X, double opponent_Y, double opponent_theta);
+
+    void xy_to_row_col(double x, double y, int * row, int * col) const;
+    int row_col_to_cell(int row, int col) const;
+    int xy_to_cell(double x, double y) const;
+
+    bool see_opponent();
+    double get_field_of_view() const {return field_of_view;}
+    double get_angle_increment() const {return angle_increment;}
+    int get_theta_discret() const {return theta_discretization;}
+    int get_num_beams() const {return num_beams;}
+};
+
+}

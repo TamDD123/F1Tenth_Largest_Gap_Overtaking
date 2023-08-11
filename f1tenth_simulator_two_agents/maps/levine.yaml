@@ -1,0 +1,8 @@
+image: levine.pgm
+resolution: 0.050000
+# first is x coordinate of origin point and second is y coodinate of origin point, and third is rotation theta of the map to the origin point
+origin: [-51.224998, -51.224998, 0.000000]
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196
+

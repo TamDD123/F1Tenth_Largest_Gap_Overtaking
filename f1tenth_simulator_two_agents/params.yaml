@@ -1,0 +1,188 @@
+# ----------------------------------------------------------------------------------------------------------------------
+# vehicle parameters ---------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
+# The distance between the front and rear axle of the racecar
+wheelbase: 0.3302 # meters
+# width of racecar
+width: 0.2032 # meters
+# according to rules https://iros2021.f1tenth.org/rules.html#25-head-to-head-race, 2.5.2.c
+cube_width: 0.20
+# Limits on the speed and steering angle
+max_speed: 27. #  meters/second
+max_steering_angle: 0.192 # radians
+max_steering_vel: 1.9 # radians/second
+max_accel: 7.51 # meters/second^2
+max_decel: 8.26 # meters/second^2
+friction_coeff: 5.923
+height_cg: 0.074 # m
+l_cg2rear: 0.139 # m
+l_cg2front: 0.1912 # m
+C_S_front: 4.718
+C_S_rear: 5.4562
+mass: 3.958 # kg
+# estimated as a rectangle with width and height of car and evenly distributed mass, then shifted to account for center of mass location
+moment_inertia: .15712 # kg m^2
+empirical_drivetrain_parameters_1: 6.097
+empirical_drivetrain_parameters_2: 0.237
+empirical_drivetrain_parameters_3: 0.392
+# engine_revolutions_per_minute_reference
+empirical_Pacejka_parameters_B_f: 0.201
+empirical_Pacejka_parameters_C_f: 2.114
+empirical_Pacejka_parameters_D_f: 28.892
+empirical_Pacejka_parameters_B_r: 0.201
+empirical_Pacejka_parameters_C_r: 2.114
+empirical_Pacejka_parameters_D_r: 28.892
+
+# ----------------------------------------------------------------------------------------------------------------------
+# update rate ----------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
+# The rate of publishing the pose, the LiDAR, and collision checking
+update_pose_rate: 0.005 #0.005
+scan_rate: 0.005
+
+# ----------------------------------------------------------------------------------------------------------------------
+# LiDAR sensor parameters ----------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
+# https://www.hokuyo-aut.jp/dl/UST-10LX_Specification.pdf
+# number of total beams
+scan_beams: 1081
+# how many radians the LiDAR will scan? should between (0, 2pi]
+scan_field_of_view: 4.71238898038469 # 270degree, degree to radians: degree*PI/180
+# maximum detection range
+scan_max_range: 10 # meters
+# The distance from the center of the rear axis (base_link) to the lidar sensor
+# Sidenote: For the F1tenth, the LiDAR is at head of a car
+scan_distance_to_base_link: 0.275 # meters
+# The standard deviation of the noise applied to the lidar simulation
+scan_std_dev: 0.015 # meters
+
+# ----------------------------------------------------------------------------------------------------------------------
+# occupancy grid threshold ---------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
+# The probability threshold for points in the occupancy grid to be considered "free".
+# Used in scan_simulator_2d.cpp set_map().
+map_free_threshold: 0.5
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Time To Collision threshold ------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
+# Time to collision cutoff value
+# Used in simulator.cpp
+ttc_threshold: 0.01
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Mux index ------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
+# total number of indices
+mux_size: 99
+
+#joy_mux_idx: 0
+key_mux_idx: 1
+random_walker_mux_idx: 2
+brake_mux_idx: 3
+nav_mux_idx: 4
+pp_mux_idx: 5
+pp2_mux_idx: 6
+# **Add index for new planning method here**
+# **(increasing accordingly)**
+# new_method_mux_idx: 7
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Joy index ------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
+# Enables joystick if true
+#joy: false
+
+# joy axis and button index depends on different controller, must check before using different controller
+# axis index (must unique)
+#joy_speed_axis_blue: 5 # LT
+#joy_angle_axis_blue: 0 # left joystick (horizon direction)
+#joy_speed_axis_red: 2 # RT
+#joy_angle_axis_red: 3 # right joystick (horizon direction)
+
+# button index (must unique)
+#joy_button_idx: 0  # A button
+key_button_idx: 2 # X button
+brake_button_idx: 3 # Y button
+random_walk_button_idx: 1 # B button
+nav_button_idx: 5 # RB button
+# **Add button for new planning method here**
+# new_button_idx: -1
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Keyboard chars -------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
+# must unique
+joy_key_char: "y"
+keyboard_key_char: "t"
+brake_key_char: "b"
+random_walk_key_char: "r"
+nav_key_char: "n"
+pp_key_char: "p"
+pp2_key_char: "q"
+# **Add button for new planning method here**
+# new_key_char: "v"
+
+# Keyboard driving params
+keyboard_speed: 9  # meters/second
+keyboard_steer_ang: 0.3  # radians
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Topics ---------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
+# topic MUST start with "/"
+#joy_topic: "/joy"
+keyboard_topic: "/key"
+drive_topic_blue: "/drive_blue"
+drive_topic_red: "/drive_red"
+map_topic: "/map"
+distance_transform_topic: "/dt"
+scan_topic_red: "/red/scan"
+scan_topic_blue: "/blue/scan"
+pose_topic_blue: "/blue/pose"
+pose_topic_red: "/red/pose"
+ground_truth_pose_topic: "/gt_pose"
+odom_topic_blue: "/odom_blue"
+odom_topic_red: "/odom_red"
+imu_topic: "/imu"
+pose_rviz_topic: "/initialpose"
+brake_bool_topic: "/brake_bool"
+mux_topic: "/mux"
+data_topic: "/data"
+
+# Topic names of various drive channels in mux.cpp
+rand_drive_topic: "/rand_drive"
+brake_drive_topic: "/brake"
+nav_drive_topic: "/nav"
+pp_drive_topic: "/pp"
+pp2_drive_topic: "/pp2"
+# **Add name for new planning method here**
+# new_drive_topic: "/new_drive"
+
+# ----------------------------------------------------------------------------------------------------------------------
+# transformation frames ------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
+# The names of the transformation frames published to
+# frame must NOT start with "/"
+map_frame: "map"
+base_frame_blue: "blue/base_link"
+scan_frame_blue: "blue/laser"
+base_frame_red: "red/base_link"
+scan_frame_red: "red/laser"
+map_name: "de-espana"
+
+broadcast_transform: true
+publish_ground_truth_pose: true
+
+
+
